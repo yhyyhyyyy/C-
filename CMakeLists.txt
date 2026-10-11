@@ -50,3 +50,13 @@ add_test(NAME TooManyArguments COMMAND Tutorial 9 16)
 set_tests_properties(InvalidText TrailingText NonFinite TooManyArguments
     PROPERTIES WILL_FAIL TRUE)
 
+
+# Step 7: portable ZIP binary and source distributions.
+include(InstallRequiredSystemLibraries)
+set(CPACK_PACKAGE_NAME "Tutorial")
+set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION}")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "CMake tutorial square-root calculator")
+set(CPACK_GENERATOR "ZIP")
+set(CPACK_SOURCE_GENERATOR "ZIP")
+set(CPACK_SOURCE_IGNORE_FILES "/build/;/[.]git/;/[.]vscode/;[.]exe$;[.]obj$;[.]lib$")
+include(CPack)
