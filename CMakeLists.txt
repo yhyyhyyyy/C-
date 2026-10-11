@@ -17,3 +17,36 @@ target_include_directories(Tutorial PRIVATE "${PROJECT_BINARY_DIR}")
 if(USE_MYMATH)
     target_link_libraries(Tutorial PRIVATE MathFunctions)
 endif()
+
+# Step 4: install the executable and configured header.
+install(TARGETS Tutorial RUNTIME DESTINATION bin)
+install(FILES "${PROJECT_BINARY_DIR}/TutorialConfig.h" DESTINATION include)
+
+# Step 4: run these tests with ctest --test-dir build -C Debug.
+enable_testing()
+
+add_test(NAME DefaultInput COMMAND Tutorial)
+set_tests_properties(DefaultInput PROPERTIES
+    PASS_REGULAR_EXPRESSION "sqrt\\(9\\)=3")
+
+function(check_sqrt name input expected)
+    add_test(NAME ${name} COMMAND Tutorial ${input})
+    set_tests_properties(${name} PROPERTIES
+        PASS_REGULAR_EXPRESSION "sqrt\\(${input}\\)=${expected}")
+endfunction()
+
+check_sqrt(Square4 4 "2")
+check_sqrt(Square9 9 "3")
+check_sqrt(Square25 25 "5")
+check_sqrt(FractionalResult 5 "2\\.23607")
+check_sqrt(Zero 0 "0")
+check_sqrt(SmallNumber 0.0001 "0\\.01")
+check_sqrt(LargeNumber 10000 "100")
+
+add_test(NAME InvalidText COMMAND Tutorial abc)
+add_test(NAME TrailingText COMMAND Tutorial 9abc)
+add_test(NAME NonFinite COMMAND Tutorial nan)
+add_test(NAME TooManyArguments COMMAND Tutorial 9 16)
+set_tests_properties(InvalidText TrailingText NonFinite TooManyArguments
+    PROPERTIES WILL_FAIL TRUE)
+
