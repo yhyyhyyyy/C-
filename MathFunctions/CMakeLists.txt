@@ -8,3 +8,11 @@ install(TARGETS MathFunctions
     LIBRARY DESTINATION lib
     RUNTIME DESTINATION bin)
 install(FILES MathFunctions.h DESTINATION include)
+
+# Step 5: detect functions before using platform-dependent code.
+include(CheckCXXSymbolExists)
+check_cxx_symbol_exists(log "cmath" HAVE_LOG)
+check_cxx_symbol_exists(exp "cmath" HAVE_EXP)
+if(HAVE_LOG AND HAVE_EXP)
+    target_compile_definitions(MathFunctions PRIVATE HAVE_LOG HAVE_EXP)
+endif()
