@@ -23,8 +23,9 @@ install(TARGETS Tutorial RUNTIME DESTINATION bin)
 install(FILES "${PROJECT_BINARY_DIR}/TutorialConfig.h" DESTINATION include)
 
 # Step 4: run these tests with ctest --test-dir build -C Debug.
-enable_testing()
+include(CTest)
 
+if(BUILD_TESTING)
 add_test(NAME DefaultInput COMMAND Tutorial)
 set_tests_properties(DefaultInput PROPERTIES
     PASS_REGULAR_EXPRESSION "sqrt\\(9\\)=3")
@@ -51,6 +52,8 @@ set_tests_properties(InvalidText TrailingText NonFinite TooManyArguments
     PROPERTIES WILL_FAIL TRUE)
 
 
+endif()
+
 # Step 7: portable ZIP binary and source distributions.
 include(InstallRequiredSystemLibraries)
 set(CPACK_PACKAGE_NAME "Tutorial")
@@ -60,3 +63,4 @@ set(CPACK_GENERATOR "ZIP")
 set(CPACK_SOURCE_GENERATOR "ZIP")
 set(CPACK_SOURCE_IGNORE_FILES "/build/;/[.]git/;/[.]vscode/;[.]exe$;[.]obj$;[.]lib$")
 include(CPack)
+
